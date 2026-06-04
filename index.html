@@ -1,1 +1,252 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Dự Đoán Người</title>
+<style>
+body{
+    font-family:Arial;
+    background:#111;
+    color:white;
+    padding:20px;
+}
+.box{
+    max-width:700px;
+    margin:auto;
+    background:#222;
+    padding:20px;
+    border-radius:12px;
+}
+button{
+    margin:5px;
+    padding:10px 15px;
+    cursor:pointer;
+}
+#result{
+    margin-top:20px;
+    font-size:22px;
+    color:gold;
+}
+</style>
+</head>
+<body>
 
+<div class="box">
+
+<h1>🔮 Dự Đoán Người</h1>
+
+<div id="question"></div>
+<div id="choices"></div>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+let data={};
+let step=0;
+
+const questions=[
+{
+q:"Bạn có ở Đắk Lắk không?",
+a:["Có","Không"]
+},
+{
+q:"Bạn từng học ở trường THCS nào?",
+a:[
+"Đinh Tiên Hoàng",
+"Lương Văn Chánh",
+"Lý Tự Trọng",
+"Nguyễn Văn Trỗi",
+"Trần Quốc Toản",
+"Lương Thế Vinh",
+"Hùng Vương"
+]
+},
+{
+q:"Bạn từng đi thi cấp tỉnh hoặc cấp phường chưa?",
+a:["Có","Không"]
+},
+{
+q:"Bạn thi môn gì?",
+a:["Toán","Lý","Anh","Văn","Hóa","Địa","Sử"]
+},
+{
+q:"Giải cao nhất bạn từng đạt?",
+a:["Nhất","Nhì","Ba","Khuyến khích","Không có"]
+}
+];
+
+showQuestion();
+
+function showQuestion(){
+
+if(step>=questions.length){
+    predict();
+    return;
+}
+
+let q=questions[step];
+
+document.getElementById("question").innerHTML=
+"<h2>"+q.q+"</h2>";
+
+let html="";
+
+q.a.forEach(ans=>{
+html+=`<button onclick="answer('${ans}')">${ans}</button>`;
+});
+
+document.getElementById("choices").innerHTML=html;
+}
+
+function answer(ans){
+
+if(step===0){
+    data.daklak=ans;
+
+    if(ans==="Không"){
+        document.getElementById("result").innerHTML=
+        "về hỏi gia đình bạn xem bạn là ai";
+        document.getElementById("question").innerHTML="";
+        document.getElementById("choices").innerHTML="";
+        return;
+    }
+}
+
+if(step===1) data.school=ans;
+
+if(step===2){
+
+    data.contest=ans;
+
+    if(ans==="Không"){
+
+        document.getElementById("question").innerHTML=
+        "<h2>Bạn là nam hay nữ?</h2>";
+
+        document.getElementById("choices").innerHTML=
+        `
+        <button onclick="gender('Nam')">Nam</button>
+        <button onclick="gender('Nữ')">Nữ</button>
+        <button onclick="gender('LGBT')">LGBT</button>
+        `;
+
+        return;
+    }
+}
+
+if(step===3) data.subject=ans;
+if(step===4) data.prize=ans;
+
+step++;
+showQuestion();
+}
+
+function gender(g){
+
+data.gender=g;
+
+document.getElementById("question").innerHTML=
+"<h2>Bạn thích môn gì?</h2>";
+
+document.getElementById("choices").innerHTML=
+`
+<button onclick="favorite('Toán')">Toán</button>
+<button onclick="favorite('Tin')">Tin</button>
+<button onclick="favorite('Văn')">Văn</button>
+<button onclick="favorite('Anh')">Anh</button>
+<button onclick="favorite('Không thích gì hết')">Không thích gì hết</button>
+`;
+}
+
+function favorite(m){
+
+if(m==="Không thích gì hết"){
+    document.getElementById("result").innerHTML=
+    " là Kẻ Vô Tình";
+}
+else{
+    document.getElementById("result").innerHTML=
+    "Never Give Up";
+}
+
+document.getElementById("question").innerHTML="";
+document.getElementById("choices").innerHTML="";
+}
+
+function predict(){
+
+if(
+data.school==="Đinh Tiên Hoàng" &&
+data.subject==="Toán" &&
+data.prize==="Không có"
+){
+    askExtra();
+    return;
+}
+
+let result="";
+
+if(
+data.school==="Đinh Tiên Hoàng" &&
+data.subject==="Hóa" &&
+data.prize==="Khuyến khích"
+){
+    result="🔥 ANH KHÔI DZ NHẤT VŨ TRỤ";
+}
+else if(
+data.school==="Lương Văn Chánh" &&
+data.subject==="Toán" &&
+data.prize==="Nhì"
+){
+    result="GAY.";
+}
+else{
+    result="📱 Nhắn tin cho gia đình bạn để biết thêm về bạn đi.";
+}
+
+document.getElementById("question").innerHTML="";
+document.getElementById("choices").innerHTML="";
+document.getElementById("result").innerHTML=result;
+}
+
+function askExtra(){
+
+document.getElementById("question").innerHTML=
+"<h2>Chữ cuối là G hay U?</h2>";
+
+document.getElementById("choices").innerHTML=
+`
+<button onclick="extra('G')">G</button>
+<button onclick="extra('U')">U</button>
+`;
+}
+
+function extra(x){
+
+if(x==="G"){
+    document.getElementById("result").innerHTML=
+    " là Hoàng Zái";
+}
+else{
+    document.getElementById("result").innerHTML=
+    "là Hiếu LGBT";
+}
+
+document.getElementById("question").innerHTML="";
+document.getElementById("choices").innerHTML="";
+}
+
+</script>
+
+</body>
+</html>
+if(
+    data.school==="Đinh Tiên Hoàng" &&
+    data.subject==="Lý" &&
+    data.prize==="Nhất"
+){
+    result=" Trí GAY";
+}
